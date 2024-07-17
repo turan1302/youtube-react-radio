@@ -1,44 +1,64 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {Link} from "react-router-dom";
+import withRouter from "../../../withRouter";
 
 class Sidebar extends Component {
-  render() {
-    return (
-        <>
-            <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                    <div className="sidebar-brand-text mx-3">mRadio</div>
-                </a>
+    constructor(props) {
+        super(props);
 
-                <hr className="sidebar-divider my-0"/>
+        this.state = {
+            toggled : false
+        }
+    }
 
-                <li className="nav-item">
-                    <Link className="nav-link" to={"/"}>
-                        <i className="fas fa-fw fa-home"></i>
-                        <span>Anasayfa</span></Link>
-                </li>
+    handleToggle = ()=>{
+        const {toggled} = this.state;
+        this.setState({
+            toggled : !toggled
+        })
+    }
 
-                <hr className="sidebar-divider"/>
+    render() {
+        const {toggled} = this.state;
+        const {location} = this.props;
 
-                <li className="nav-item">
-                    <Link className="nav-link" to={"/favourite"}>
-                        <i className="fas fa-fw fa-heart"></i>
-                        <span>Favoriler</span></Link>
-                </li>
+        return (
+            <>
+                <ul className={`navbar-nav bg-gradient-primary ${(toggled) ? 'toggled' : ''} sidebar sidebar-dark accordion`} id="accordionSidebar">
+
+                    <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                        <div className="sidebar-brand-text mx-3">mRadio</div>
+                    </a>
+
+                    <hr className="sidebar-divider my-0"/>
+
+                    <li className={`nav-item ${(location.pathname==='/') ? 'active' : ''}`}>
+                        <Link className="nav-link" to={"/"}>
+                            <i className="fas fa-fw fa-home"></i>
+                            <span>Anasayfa</span></Link>
+                    </li>
+
+                    <hr className="sidebar-divider"/>
+
+                    <li className={`nav-item ${(location.pathname==='/favourite') ? 'active' : ''}`}>
+                        <Link className="nav-link" to={"/favourite"}>
+                            <i className="fas fa-fw fa-heart"></i>
+                            <span>Favoriler</span></Link>
+                    </li>
 
 
-                <hr className="sidebar-divider d-none d-md-block"/>
+                    <hr className="sidebar-divider d-none d-md-block"/>
 
-                <div className="text-center d-none d-md-inline">
-                    <button className="rounded-circle border-0" id="sidebarToggle"></button>
-                </div>
+                    <div className="text-center d-none d-md-inline">
+                        <button onClick={()=>this.handleToggle()} className="rounded-circle border-0" id="sidebarToggle"></button>
+                    </div>
 
 
-            </ul>
-        </>
-    )
-  }
+                </ul>
+            </>
+        )
+    }
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);

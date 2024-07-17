@@ -25,6 +25,10 @@ class Favourite extends Component {
 
                                 <div className="row">
 
+                                    <div className={"col-md-12 my-3"}>
+                                        <input className={"form-control"} placeholder={"Radyo ismi giriniz..."}/>
+                                    </div>
+
                                     <div className="col-xl-3 col-md-6 mb-4">
                                         <div className="card shadow h-100 py-2">
                                             <div className="card-body">
@@ -50,7 +54,7 @@ class Favourite extends Component {
 
                         </div>
 
-                      <Footer/>
+                        <Footer/>
 
                     </div>
 

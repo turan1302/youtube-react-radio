@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {Navigate, Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
 import Favourite from "../pages/Favoruite";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 class AppRouter extends Component {
   render() {
@@ -9,6 +11,8 @@ class AppRouter extends Component {
     <Routes>
         <Route path={"/"} element={<Home/>}></Route>
         <Route path={"/favourite"} element={<Favourite/>}></Route>
+        <Route path={"/login"} element={<Login/>}></Route>
+        <Route path={"/register"} element={<Register/>}></Route>
         <Route path={"*"} element={<Navigate to={"/"}/>}></Route>
     </Routes>
     )
