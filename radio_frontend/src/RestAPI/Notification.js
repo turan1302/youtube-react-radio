@@ -5,7 +5,7 @@ class Notification{
         return Swal.fire({
             icon : "success",
             title : data.title,
-            text : data.text,
+            text : data.message,
             confirmButtonText : "OK"
         })
     }
@@ -14,7 +14,7 @@ class Notification{
         return Swal.fire({
             icon : "error",
             title : data.title,
-            text : data.text,
+            text : data.message,
             confirmButtonText : "OK"
         })
     }

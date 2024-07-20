@@ -12,7 +12,7 @@ class BaseController extends Controller
         $result = [
             "success" => true,
             "title" => "Başarılı",
-            "text" => $message,
+            "message" => $message,
             "data" => $data
         ];
 
@@ -24,7 +24,7 @@ class BaseController extends Controller
         $result = [
             "success" => false,
             "title" => "Başarılı",
-            "text" => $message,
+            "message" => $message,
         ];
 
         if (!empty($errorData)){
