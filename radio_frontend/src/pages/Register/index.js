@@ -69,7 +69,7 @@ class Register extends Component {
                                                 }}
                                                         validationSchema={Yup.object().shape({
                                                             name: Yup.string().required("Ad soyad alanı zorunludur"),
-                                                            email: Yup.string().required("E-mail alanı zorunludur").email("Lütfen geçerli bir E-Mail adresi giriniz"),
+                                                            email: Yup.string().required("E-Mail alanı zorunludur").email("Lütfen geçerli bir E-Mail adresi giriniz"),
                                                             password: Yup.string().required("Şifre alanı zorunludur").min(8, "Şifreniz minimum 8 karakter olmak zorundadır").max(16, "Şifreniz maksimum 16 karakter olmak zorundadır"),
                                                             password_confirmation: Yup.string().required("Şifre tekrar alanı zorunludur").oneOf([Yup.ref("password"), null], "Şifreler eşleşmiyor")
                                                         })}
