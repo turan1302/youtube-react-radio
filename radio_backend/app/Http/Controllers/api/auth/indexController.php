@@ -28,10 +28,10 @@ class indexController extends BaseController
                 "url" => $client->url,
                 "channel" => $client->channel,
                 "token_type" => "Bearer",
-                "token" => $token
+                "access_token" => $token
             ]);
         }else{
-            return parent::error("Kullanıcı bilgileri hatalı",[],404);
+            return parent::error("Kullanıcı bilgileri hatalı",[],401);
         }
     }
 
