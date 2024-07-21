@@ -23,7 +23,7 @@ class BaseController extends Controller
     {
         $result = [
             "success" => false,
-            "title" => "Başarılı",
+            "title" => "Hata",
             "message" => $message,
         ];
 
