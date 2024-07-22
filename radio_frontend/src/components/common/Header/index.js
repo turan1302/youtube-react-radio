@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Link} from "react-router-dom";
 
 class Header extends Component {
   render() {
@@ -48,10 +49,10 @@ class Header extends Component {
                         <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
                             <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="#">
+                            <Link to={"/logout"} className="dropdown-item">
                                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
+                                Çıkış Yap
+                            </Link>
                         </div>
                     </li>
 
