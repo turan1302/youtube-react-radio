@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import Sidebar from "../../components/common/Sidebar";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
+import AuthLayout from "../../components/Layout/AuthLayout";
 
 class Home extends Component {
     render() {
         return (
-            <>
+            <AuthLayout>
                 <div id="wrapper">
 
                     <Sidebar/>
@@ -49,7 +50,6 @@ class Home extends Component {
                                     </div>
 
 
-
                                 </div>
 
                             </div>
@@ -61,8 +61,7 @@ class Home extends Component {
                     </div>
 
                 </div>
-
-            </>
+            </AuthLayout>
         )
     }
 }

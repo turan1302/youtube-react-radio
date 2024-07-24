@@ -3,6 +3,7 @@ import {inject, observer} from "mobx-react";
 import withRouter from "../../withRouter";
 import RestClient from "../../RestAPI/RestClient";
 import AppUrl from "../../RestAPI/AppUrl";
+import AuthLayout from "../../components/Layout/AuthLayout";
 
 class Logout extends Component {
 
@@ -33,9 +34,9 @@ class Logout extends Component {
 
   render() {
         return (
-            <>
+          <AuthLayout>
 
-            </>
+          </AuthLayout>
         )
     }
 }
