@@ -14,3 +14,7 @@ Route::group(['prefix'=>'client','as'=>'client.'],function (){
         Route::get('logout',[\App\Http\Controllers\api\auth\indexController::class,'logout'])->name('logout');
     });
 });
+
+Route::group(['prefix'=>'home','middleware'=>'auth:api_client','as'=>'home.'],function (){
+    Route::get('',[\App\Http\Controllers\api\home\indexController::class,'index'])->name('index');
+});
