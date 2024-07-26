@@ -15,9 +15,9 @@ class Home extends Component {
         super(props);
 
         this.state = {
-            searchText : '',
-            radios : [],
-            isLoading : true
+            searchText: '',
+            radios: [],
+            isLoading: true
         }
     }
 
@@ -25,41 +25,76 @@ class Home extends Component {
         this.getRadios();
     }
 
-    getRadios = ()=>{
+    getRadios = () => {
         this.props.AuthStore.getToken();
-        const token = (this.props.AuthStore.appState!==null) ? this.props.AuthStore.appState.user.access_token : null;
+        const token = (this.props.AuthStore.appState !== null) ? this.props.AuthStore.appState.user.access_token : null;
 
-        RestClient.getRequest(AppUrl.home,{
-            headers : {
-                "Authorization" : "Bearer "+token
+        RestClient.getRequest(AppUrl.home, {
+            headers: {
+                "Authorization": "Bearer " + token
             }
-        }).then((res)=>{
+        }).then((res) => {
             const status = res.status;
             const result = res.data;
 
-            if (status===200){
+            if (status === 200) {
                 this.setState({
-                    isLoading : false,
-                    radios : result.data
+                    isLoading: false,
+                    radios: result.data
                 })
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
             Notification.error({
-                title : "Hata",
-                message : "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz"
+                title: "Hata",
+                message: "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz"
             })
         })
     }
 
-    radioRender = (data)=>{
+    favourite = (id)=>{
+        const {radios} = this.state;
+
+        let newRadios = radios.map((item)=>{
+            return (item.rd_id===id) ? {...item,isFavourite : !item.isFavourite} : item
+        });
+
+        this.setState({
+            radios : newRadios
+        },()=>{
+            this.setFavourite(id);
+        });
+    }
+
+    setFavourite = (id)=>{
+        this.props.AuthStore.getToken();
+        const token = (this.props.AuthStore.appState !== null) ? this.props.AuthStore.appState.user.access_token : null;
+
+        RestClient.postRequest(AppUrl.set_favourite,{
+            fw_radio : id
+        },{
+            headers : {
+                "Authorization" : "Bearer "+token
+            }
+        }).then((res)=>{
+
+        }).catch((err)=>{
+            console.log(err);
+            Notification.error({
+                title: "Hata",
+                message: "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz"
+            })
+        })
+    }
+
+    radioRender = (data) => {
         const {searchText} = this.state;
 
-        let newRadio = data.filter(item=>{
+        let newRadio = data.filter(item => {
             return item.rd_name.match(searchText);
         })
 
-        return newRadio.map((item,index)=>{
+        return newRadio.map((item, index) => {
             return (
                 <div key={index} className="col-xl-3 col-md-6 mb-4">
                     <div className="card shadow h-100 py-2">
@@ -73,7 +108,8 @@ class Home extends Component {
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-play fa-2x text-gray-300"></i>
-                                    <i className="fas fa-heart ml-3 fa-2x text-gray-300"></i>
+                                    <i onClick={() => this.favourite(item.rd_id)}
+                                       className={`fas fa-heart ml-3 fa-2x ${(item.isFavourite) ? 'text-danger' : 'text-gray-300'}`}></i>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +151,8 @@ class Home extends Component {
                                 <div className="row">
 
                                     <div className={"col-md-12 my-3"}>
-                                        <input onChange={(e)=>this.setState({searchText : e.target.value})} className={"form-control"} placeholder={"Radyo ismi giriniz..."}/>
+                                        <input onChange={(e) => this.setState({searchText: e.target.value})}
+                                               className={"form-control"} placeholder={"Radyo ismi giriniz..."}/>
                                     </div>
 
                                     {(radios.length > 0) ? this.radioRender(radios) : (
