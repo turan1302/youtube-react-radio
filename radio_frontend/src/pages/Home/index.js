@@ -94,29 +94,40 @@ class Home extends Component {
             return item.rd_name.match(searchText);
         })
 
-        return newRadio.map((item, index) => {
-            return (
-                <div key={index} className="col-xl-3 col-md-6 mb-4">
-                    <div className="card shadow h-100 py-2">
-                        <div className="card-body">
-                            <div className="row no-gutters align-items-center">
-                                <div className="col mr-2">
-                                    <div
-                                        className="text-xs font-weight-bold text-uppercase mb-1">
-                                        {item.rd_name}
+        if (newRadio.length>0){
+            return newRadio.map((item, index) => {
+                return (
+                    <div key={index} className="col-xl-3 col-md-6 mb-4">
+                        <div className="card shadow h-100 py-2">
+                            <div className="card-body">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div
+                                            className="text-xs font-weight-bold text-uppercase mb-1">
+                                            {item.rd_name}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-auto">
-                                    <i className="fas fa-play fa-2x text-gray-300"></i>
-                                    <i onClick={() => this.favourite(item.rd_id)}
-                                       className={`fas fa-heart ml-3 fa-2x ${(item.isFavourite) ? 'text-danger' : 'text-gray-300'}`}></i>
+                                    <div className="col-auto">
+                                        <i className="fas fa-play fa-2x text-gray-300"></i>
+                                        <i onClick={() => this.favourite(item.rd_id)}
+                                           className={`fas fa-heart ml-3 fa-2x ${(item.isFavourite) ? 'text-danger' : 'text-gray-300'}`}></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                )
+            })
+        }else{
+            return (
+                <div className={"container-fluid"}>
+                    <div className={"col-md-12 alert alert-danger text-center"}>
+                        Herhangi bir radyo kanalı bulunamadı
+                    </div>
                 </div>
             )
-        })
+        }
+
     }
 
     render() {

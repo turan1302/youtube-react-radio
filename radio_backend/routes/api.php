@@ -19,3 +19,8 @@ Route::group(['prefix'=>'home','middleware'=>'auth:api_client','as'=>'home.'],fu
     Route::get('',[\App\Http\Controllers\api\home\indexController::class,'index'])->name('index');
     Route::post('set-favourite',[\App\Http\Controllers\api\home\indexController::class,'set_favourite'])->name('set_favourite');
 });
+
+Route::group(['prefix'=>'favourites','middleware'=>'auth:api_client','as'=>'favourites.'],function (){
+    Route::get('',[\App\Http\Controllers\api\favourite\indexController::class,'index'])->name('index');
+    Route::post('remove-favourite',[\App\Http\Controllers\api\favourite\indexController::class,'remove_favourite'])->name('remove_favourite');
+});
