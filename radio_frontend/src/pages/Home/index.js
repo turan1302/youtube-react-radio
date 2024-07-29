@@ -8,16 +8,22 @@ import withRouter from "../../withRouter";
 import RestClient from "../../RestAPI/RestClient";
 import AppUrl from "../../RestAPI/AppUrl";
 import Notification from "../../RestAPI/Notification";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
 
+        const {user} = (this.props.AuthStore.appState !== null) ? this.props.AuthStore.appState : {};
+
         this.state = {
             searchText: '',
             radios: [],
-            isLoading: true
+            isLoading: true,
+            playUrl : user.url,
+            playChannel : user.channel
         }
     }
 
@@ -44,6 +50,106 @@ class Home extends Component {
                 })
             }
         }).catch((err) => {
+            console.log(err);
+            Notification.error({
+                title: "Hata",
+                message: "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz"
+            })
+        })
+    }
+
+    play = (url,channel)=>{
+        const {navigate} = this.props;
+        this.props.AuthStore.getToken();
+        const token = (this.props.AuthStore.appState !== null) ? this.props.AuthStore.appState.user.access_token : null;
+
+        RestClient.postRequest(AppUrl.update,{
+            url : url,
+            channel : channel
+        },{
+            headers : {
+                "Authorization" : "Bearer "+token
+            }
+        }).then((res)=>{
+            const result = res.data;
+
+            if (result.success===false){
+                Notification.error(result);
+                navigate("/");
+            }else{
+                this.setState({
+                    playUrl : url,
+                    playChannel : channel
+                },()=>{
+                    let userData = {
+                        id : result.data.id,
+                        name : result.data.name,
+                        email : result.data.email,
+                        url : result.data.url,
+                        channel : result.data.channel,
+                        access_token : result.data.access_token
+                    }
+
+                    let appState = {
+                        "isLoggedIn" : true,
+                        "user" : userData
+                    }
+
+                    this.props.AuthStore.saveToken(appState);
+                });
+            }
+
+        }).catch((err)=>{
+            console.log(err);
+            Notification.error({
+                title: "Hata",
+                message: "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz"
+            })
+        })
+    }
+
+    stop = ()=>{
+        const {navigate} = this.props;
+        this.props.AuthStore.getToken();
+        const token = (this.props.AuthStore.appState !== null) ? this.props.AuthStore.appState.user.access_token : null;
+
+        RestClient.postRequest(AppUrl.update,{
+            url : null,
+            channel : null
+        },{
+            headers : {
+                "Authorization" : "Bearer "+token
+            }
+        }).then((res)=>{
+            const result = res.data;
+
+            if (result.success===false){
+                Notification.error(result);
+                navigate("/");
+            }else{
+                this.setState({
+                    playUrl : null,
+                    playChannel : null
+                },()=>{
+                    let userData = {
+                        id : result.data.id,
+                        name : result.data.name,
+                        email : result.data.email,
+                        url : result.data.url,
+                        channel : result.data.channel,
+                        access_token : result.data.access_token
+                    }
+
+                    let appState = {
+                        "isLoggedIn" : true,
+                        "user" : userData
+                    }
+
+                    this.props.AuthStore.saveToken(appState);
+                });
+            }
+
+        }).catch((err)=>{
             console.log(err);
             Notification.error({
                 title: "Hata",
@@ -88,7 +194,7 @@ class Home extends Component {
     }
 
     radioRender = (data) => {
-        const {searchText} = this.state;
+        const {searchText,playUrl} = this.state;
 
         let newRadio = data.filter(item => {
             return item.rd_name.match(searchText);
@@ -108,7 +214,8 @@ class Home extends Component {
                                         </div>
                                     </div>
                                     <div className="col-auto">
-                                        <i className="fas fa-play fa-2x text-gray-300"></i>
+                                        <i onClick={()=>this.play(item.rd_link,item.rd_name)}
+                                           className={`fas ${(playUrl===item.rd_link) ? 'fa-pause' : 'fa-play'} fa-2x text-gray-300`}></i>
                                         <i onClick={() => this.favourite(item.rd_id)}
                                            className={`fas fa-heart ml-3 fa-2x ${(item.isFavourite) ? 'text-danger' : 'text-gray-300'}`}></i>
                                     </div>
@@ -131,7 +238,7 @@ class Home extends Component {
     }
 
     render() {
-        const {isLoading, radios} = this.state;
+        const {isLoading, radios,playUrl,playChannel} = this.state;
 
         if (isLoading) {
             return (
@@ -156,7 +263,19 @@ class Home extends Component {
                             <div className="container-fluid">
 
                                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <h1 className="h3 mb-0 text-gray-800">Radyo Listesi</h1>
+                                    <h1 className="h3 mb-0 text-gray-800">Radyo Listesi
+
+
+                                        {(playUrl!== null) && (
+                                            <>
+                                                <hr/>
+                                                <p>Oynatılan Kanal: {playChannel}</p>
+                                                <button onClick={()=>this.stop()} className={"btn btn-sm btn-danger"}>
+                                                    Kapat
+                                                </button>
+                                            </>
+                                        )}
+                                    </h1>
                                 </div>
 
                                 <div className="row">
@@ -170,6 +289,16 @@ class Home extends Component {
                                         <div className={"alert alert-danger text-center"}>
                                             Herhangi bir radyo kanalı bulunamadı
                                         </div>
+                                    )}
+
+                                    {(playUrl !== null) && (
+                                        <>
+                                        <AudioPlayer
+                                            autoPlay
+                                            src={playUrl}
+                                            showJumpControls={false}
+                                        />
+                                        </>
                                     )}
 
                                 </div>
