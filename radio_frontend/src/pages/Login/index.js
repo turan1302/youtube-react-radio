@@ -10,7 +10,6 @@ import Notification from "../../RestAPI/Notification";
 
 class Login extends Component {
 
-    // eslint-disable-next-line no-useless-constructor
     constructor(props) {
         super(props);
     }
