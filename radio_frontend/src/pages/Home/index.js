@@ -10,6 +10,8 @@ import AppUrl from "../../RestAPI/AppUrl";
 import Notification from "../../RestAPI/Notification";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import {Helmet} from "react-helmet";
+import {BarsSpinner} from "react-spinners-kit";
 
 class Home extends Component {
 
@@ -182,9 +184,7 @@ class Home extends Component {
             headers : {
                 "Authorization" : "Bearer "+token
             }
-        }).then((res)=>{
-
-        }).catch((err)=>{
+        }).then((res)=>{}).catch((err)=>{
             console.log(err);
             Notification.error({
                 title: "Hata",
@@ -243,29 +243,30 @@ class Home extends Component {
         if (isLoading) {
             return (
                 <div className={"d-flex justify-content-center align-items-center vh-100"}>
-                    Yükleniyor...
+                    <BarsSpinner size={30} color="#2250fc" loading={isLoading} />
                 </div>
             )
         }
 
         return (
             <AuthLayout>
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>Anasayfa | mRadio</title>
+                </Helmet>
+
                 <div id="wrapper">
 
                     <Sidebar/>
 
                     <div id="content-wrapper" className="d-flex flex-column">
-
                         <div id="content">
 
                             <Header/>
 
                             <div className="container-fluid">
-
                                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                                     <h1 className="h3 mb-0 text-gray-800">Radyo Listesi
-
-
                                         {(playUrl!== null) && (
                                             <>
                                                 <hr/>
@@ -279,12 +280,10 @@ class Home extends Component {
                                 </div>
 
                                 <div className="row">
-
                                     <div className={"col-md-12 my-3"}>
                                         <input onChange={(e) => this.setState({searchText: e.target.value})}
                                                className={"form-control"} placeholder={"Radyo ismi giriniz..."}/>
                                     </div>
-
                                     {(radios.length > 0) ? this.radioRender(radios) : (
                                         <div className={"alert alert-danger text-center"}>
                                             Herhangi bir radyo kanalı bulunamadı
@@ -300,17 +299,13 @@ class Home extends Component {
                                         />
                                         </>
                                     )}
-
                                 </div>
-
                             </div>
-
                         </div>
 
                         <Footer/>
 
                     </div>
-
                 </div>
             </AuthLayout>
         )

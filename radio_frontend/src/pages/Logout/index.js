@@ -4,6 +4,7 @@ import withRouter from "../../withRouter";
 import RestClient from "../../RestAPI/RestClient";
 import AppUrl from "../../RestAPI/AppUrl";
 import AuthLayout from "../../components/Layout/AuthLayout";
+import {Helmet} from "react-helmet";
 
 class Logout extends Component {
 
@@ -35,7 +36,10 @@ class Logout extends Component {
   render() {
         return (
           <AuthLayout>
-
+              <Helmet>
+                  <meta charSet="utf-8" />
+                  <title>Çıkış Yap | mRadio</title>
+              </Helmet>
           </AuthLayout>
         )
     }
